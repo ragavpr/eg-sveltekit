@@ -3,7 +3,10 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"mod:build": "cd modules/wasm-js-rust && wasm-pack build --target web",
+		"mod:watch": "cd modules/wasm-js-rust && nodemon --watch src -e rs --exec wasm-pack build --target web",
 		"dev": "vite dev",
+		"dev:mod": "pnpm run dev & pnpm run mod:watch",
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",

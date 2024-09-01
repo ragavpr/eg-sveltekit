@@ -1,38 +1,18 @@
-# create-svelte
+# Example
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## SvelteKit x WASM
 
-## Creating a project
+- No additional dependancies, full live reloading is flawless.
+- Only `wasm-pack` is used to build the rust cargo project module.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Setup
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- Use a submodule or a seperate folder to mange the rust cargo project.
+- Edit module path as required in `package.json`'s tasks `mod:build` and `mod:watch`.
+- Use `rustup` and install required packages as needed.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+### Usage
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Use `pnpm mod:build` to build the rust cargo project once (requires `wasm-pack` and `rustup` environment).
+- Use `pnpm dev` to use Vite's default development server.
+- Use `pnpm dev:mod` to also support the live reloading of rust module changes. (requires `nodemon`)
