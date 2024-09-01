@@ -1,0 +1,3 @@
+[submodule "modules/wasm-js-rust"]
+	path = modules/wasm-js-rust
+	url = https://github.com/ragavpr/eg-wasm-js-rust
