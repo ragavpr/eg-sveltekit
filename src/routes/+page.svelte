@@ -8,12 +8,11 @@
 
     const messages = writable<SSE_Event[]>([]);
 
-    const sse_url = "https://sse.dev/test";
+    const sse_url = `http://${window.location.host}/sse-source`;
     const evtSource = new EventSource(sse_url);
 
     evtSource.onmessage = (event) => {
-        // event.data is a string
-        //data: {"testing":true,"sse_dev":"is great","msg":"It works!","now":1725297712676}\n\n
+        //data: {"msg":"Message from instance: 1","now":1725299770405}\n\n
         const event_data: SSE_Event = JSON.parse(event.data);
         messages.update(prev => prev.concat(event_data));
     };
