@@ -1,25 +1,40 @@
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const connections_array: Record<string, ReadableStreamDefaultController> = {};
+let broadcastInterval: NodeJS.Timeout | undefined = undefined;
 let gid = 0;
-export async function GET({ url }) {
+
+function broadcast() {
+	const time = Date.now();
+	console.log(`Broadcasting message to ${Object.keys(connections_array).length} instances`);
+	Object.keys(connections_array).forEach((id) => {
+		connections_array[id].enqueue(
+			`data: ${JSON.stringify({
+				msg: `Instance: #${id} - Connections: ${Object.keys(connections_array).length}`,
+				now: time
+			})}\n\n`
+		);
+	});
+}
+
+export async function GET() {
 	const id = ++gid;
 	const stream = new ReadableStream({
 		async start(controller) {
-			// You can enqueue multiple data asynchronously here.
-			while (true) {
-				await delay(1000);
-				const data = {
-					msg: `Message from instance: ${id}`,
-					now: Date.now()
-				};
-				//TODO: investigate: Despite cancelling, one more message is sent, then it stops
-				console.log(`Sending message to instance ${id}`);
-				controller.enqueue(`data: ${JSON.stringify(data)}\n\n`);
+			console.log(`Instance #${id} is connected`);
+			connections_array[id] = controller;
+			// there were no connections before
+			if (Object.keys(connections_array).length == 1) {
+				console.log(`Routine started`);
+				broadcastInterval = setInterval(broadcast, 1000);
 			}
-			// controller.close();
 		},
 		cancel() {
-			console.log(`Instance ${id} is cancelled`);
-			// cancel your resources here
+			console.log(`Instance #${id} is cancelled`);
+			delete connections_array[id];
+			// there are no connections left
+			if (Object.keys(connections_array).length == 0) {
+				console.log(`Routine ended`);
+				clearInterval(broadcastInterval!);
+			}
 		}
 	});
 
