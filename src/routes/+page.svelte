@@ -1,2 +1,7 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	// src/routes/+page.svelte
+	import { source } from 'sveltekit-sse';
+	const value = source('/sse-source').select('message');
+</script>
+
+{$value}
